@@ -223,7 +223,6 @@ notebook-shim==0.2.3
 pip==24.2
 setuptools==68.0.0
 wheel
-numpy==1.24.0
 numpy-quaternion==2023.1.0
 numpydoc==1.5.0
 nvidia-cudnn-cu11==8.6.0
