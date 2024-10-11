@@ -22,7 +22,7 @@ setuptools==68.0.0
 wheel==0.41.0
 numpy>=1.24.4
 protobuf==3.20.3
-opencv-python==4.6.0.66
+opencv-python-headless
 pathlib2==2.3.7
 Pillow==9.4.0
 tensorflow-cpu==2.16.1
