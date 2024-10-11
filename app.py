@@ -8,15 +8,18 @@ Original file is located at
 """
 
 from tensorflow.keras.models import load_model
+try:
+    model = load_model('K13_best_model_maize_diseases.keras')
+    st.success("Modèle chargé avec succès!")
+except Exception as e:
+    st.error(f"Erreur lors du chargement du modèle: {e}")
 
-# Charger le modèle
-model = load_model('K13_best_model_maize_diseases.keras')
 
 import streamlit as st
 import numpy as np
 import cv2
 from PIL import Image
-from tensorflow.keras.models import load_model
+
 
 # Charger le modèle de prédiction
 #model = load_model('/chemin/vers/ton_modele.keras')
