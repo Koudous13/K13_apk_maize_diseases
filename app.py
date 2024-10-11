@@ -1,4 +1,5 @@
 import os
+import gdown
 import streamlit as st
 import numpy as np
 import cv2
@@ -6,8 +7,20 @@ from PIL import Image
 from tensorflow.keras.models import load_model
 
 # Charger le modèle de prédiction
-model_path = os.path.join(os.path.dirname(__file__), 'K13_best_model_maize_diseases.keras')
-model = load_model(model_path)
+url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
+output = 'K13_best_model_maize_diseases.keras'
+
+@st.cache_resource
+def download_and_load_model():
+    # Télécharger le fichier si nécessaire
+    if not os.path.exists(output):
+        gdown.download(url, output, quiet=False)
+    
+    # Charger le modèle depuis le fichier local
+    model = load_model(output)
+    return model
+
+
 
 # Appliquer un thème CSS pour l'application
 st.markdown("""
@@ -81,6 +94,12 @@ st.markdown("""
 
 # Titre de l'application
 st.title("🌽 Détection des Maladies des Feuilles de Maïs")
+
+with st.spinner('Loading model...'):
+    model = download_and_load_model()
+
+st.success('Model loaded successfully!')
+
 st.subheader("Chargez une photo de feuille de maïs ou utilisez la webcam pour en prendre une.")
 
 # Widgets pour charger ou prendre une photo
