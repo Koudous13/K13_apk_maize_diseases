@@ -13,11 +13,8 @@ from PIL import Image
 from tensorflow.keras.models import load_model
 
 # Charger le modèle de prédiction
-try:
-    model = load_model('K13_best_model_maize_diseases.keras')
-    st.success("Modèle chargé avec succès!")
-except Exception as e:
-    st.error(f"Erreur lors du chargement du modèle: {e}")
+model_path = os.path.join(os.path.dirname(__file__), 'K13_best_model_maize_diseases.keras')
+model = load_model(model_path)
 
 # Appliquer un thème CSS pour l'application
 st.markdown("""
