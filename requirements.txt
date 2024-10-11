@@ -28,6 +28,7 @@ Pillow==9.4.0
 tensorflow-cpu==2.16.1
 tzdata==2024.1
 urllib3==2.0.3
+streamlit
 webcolors==1.12
 websocket-client==1.5.1
 zipp==3.15.0
