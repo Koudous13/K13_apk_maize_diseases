@@ -1,6 +1,5 @@
 watchdog==3.0.0
 webcolors==1.12
-webdataset==0.22.1
 websocket-client==1.5.1
 whisper==2022.9.29
 whisper-pt==1.0.0
