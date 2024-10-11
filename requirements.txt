@@ -9,7 +9,6 @@ turtle==0.0.1
 twilio==7.2.0
 typing-extensions==4.6.1
 typing-inspect==0.8.0
-typing-utils==0.2.0
 tzdata==2024.1
 urllib3==2.0.3
 uvicorn==0.22.0
