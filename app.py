@@ -186,8 +186,8 @@ import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
 
-model = load_model("/mount/src/k13_apk_maize_diseases/K13_best_model_maize_diseases.keras")
-print(model.summary())
+model = load_model("K13_best_model_maize_diseases.keras")
+
 
 
 
