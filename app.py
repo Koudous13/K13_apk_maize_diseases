@@ -213,7 +213,5 @@ def download_and_load_model():
     model = load_model(output)
     return model
 
-
-with st.spinner('Chargement du modèle...'):
-    model = download_and_load_model()
+get_working_directory()
 
