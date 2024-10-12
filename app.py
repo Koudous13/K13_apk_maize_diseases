@@ -179,39 +179,27 @@ st.markdown("""
 '''
 
 
-
-
-
-
-
-import os
 import gdown
 import streamlit as st
+import numpy as np
+import cv2
+from PIL import Image
 from tensorflow.keras.models import load_model
 
-# URL du fichier modèle sur Google Drive
-url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
-output = 'K13_best_model_maize_diseases.keras'
+# URL du fichier depuis le dépôt GitHub
+url = "https://github.com/Koudous13/K13_apk_maize_diseases/raw/main/K13_best_model_maize_diseases.keras"
+output = "K13_best_model_maize_diseases.keras"
 
-# Vérifier le répertoire de travail actuel
-def get_working_directory():
-    current_dir = os.getcwd()
-    st.write(f"Répertoire de travail actuel : {current_dir}")
-    return current_dir
+# Télécharger le modèle si nécessaire
+if not os.path.exists(output):
+    gdown.download(url, output, quiet=False)
 
-# Téléchargement et chargement du modèle avec Streamlit cache
-@st.cache_resource
-def download_and_load_model():
-    if not os.path.exists(output):
-        st.write("Téléchargement du modèle...")
-        gdown.download(url, output, quiet=False)
+# Vérification
+assert os.path.exists(output), "Erreur : le modèle n'a pas été téléchargé."
 
-    # Vérifier que le fichier est bien présent
-    assert os.path.exists(output), "Le fichier modèle n'a pas été téléchargé correctement."
-    
-    # Charger le modèle
-    model = load_model(output)
-    return model
+# Charger le modèle
+model = load_model(output)
+print("Modèle chargé avec succès.")
 
-get_working_directory()
+
 
