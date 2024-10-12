@@ -13,12 +13,14 @@ output = 'K13_best_model_maize_diseases.keras'
 @st.cache_resource
 def download_and_load_model():
     # Télécharger le fichier si nécessaire
-    if not os.path.exists(output):
-        gdown.download(url, output, quiet=False)
-    
-    # Charger le modèle depuis le fichier local
-    model = load_model(output)
-    return model
+   try:
+        if not os.path.exists(output):
+            gdown.download(url, output, quiet=False)
+        model = load_model(output)
+        return model
+    except Exception as e:
+        st.error("Erreur lors du chargement du modèle: " + str(e))
+        return None
 
 
 
