@@ -1,4 +1,4 @@
-import os
+'''import os
 import gdown
 import streamlit as st
 import numpy as np
@@ -175,3 +175,48 @@ st.markdown("""
         <p>© 2024. Tous droits réservés.</p>
     </div>
 """, unsafe_allow_html=True)
+
+'''
+
+
+
+
+
+
+
+import os
+import gdown
+import streamlit as st
+from tensorflow.keras.models import load_model
+
+# URL du fichier modèle sur Google Drive
+url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
+output = 'K13_best_model_maize_diseases.keras'
+
+# Vérifier le répertoire de travail actuel
+def get_working_directory():
+    current_dir = os.getcwd()
+    st.write(f"Répertoire de travail actuel : {current_dir}")
+    return current_dir
+
+# Téléchargement et chargement du modèle avec Streamlit cache
+@st.cache_resource
+def download_and_load_model():
+    if not os.path.exists(output):
+        st.write("Téléchargement du modèle...")
+        gdown.download(url, output, quiet=False)
+
+    # Vérifier que le fichier est bien présent
+    assert os.path.exists(output), "Le fichier modèle n'a pas été téléchargé correctement."
+    
+    # Charger le modèle
+    model = load_model(output)
+    return model
+
+# Interface Streamlit
+st.title("Détection de maladies du maïs 🌽")
+
+with st.spinner('Chargement du modèle...'):
+    model = download_and_load_model()
+
+st.success("Modèle chargé avec succès !")
