@@ -18,7 +18,7 @@ def download_and_load_model():
             gdown.download(url, output, quiet=False)
         model = load_model(output)
         return model
-    except Exception as e:
+   except Exception as e:
         st.error("Erreur lors du chargement du modèle: " + str(e))
         return None
 
