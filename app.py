@@ -185,6 +185,7 @@ import numpy as np
 import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
+import keras
 
 model = load_model("K13_best_model_maize_diseases.keras")
 
