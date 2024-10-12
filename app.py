@@ -213,10 +213,7 @@ def download_and_load_model():
     model = load_model(output)
     return model
 
-# Interface Streamlit
-st.title("Détection de maladies du maïs 🌽")
 
 with st.spinner('Chargement du modèle...'):
     model = download_and_load_model()
 
-st.success("Modèle chargé avec succès !")
