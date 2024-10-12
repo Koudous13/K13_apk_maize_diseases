@@ -1,3 +1,4 @@
+python-3.9
 python3-distutils
 zlib1g-dev
 libjpeg-dev
