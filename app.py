@@ -186,7 +186,7 @@ import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
 
-model = load_model("model_K13_Electric_Vehicle.pkl")
+model = load_model("K13_best_model_maize_diseases.keras")
 
 
 
