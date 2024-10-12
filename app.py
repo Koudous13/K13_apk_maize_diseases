@@ -185,24 +185,9 @@ import numpy as np
 import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
-'''
-# URL du fichier depuis le dépôt GitHub
-url = "https://github.com/Koudous13/K13_apk_maize_diseases/raw/main/K13_best_model_maize_diseases.keras"
-output = "K13_best_model_maize_diseases.keras"
 
-# Télécharger le modèle si nécessaire
-if not os.path.exists(output):
-    gdown.download(url, output, quiet=False)
-
-# Vérification
-assert os.path.exists(output), "Erreur : le modèle n'a pas été téléchargé."
-
-# Charger le modèle
-model = load_model(output)
-print("Modèle chargé avec succès.")
-'''
-model = load_model("K13_best_model_maize_diseases.keras")
-print(model)
+model = load_model("/mount/src/k13_apk_maize_diseases/K13_best_model_maize_diseases.keras")
+print(model.summary())
 
 
 
