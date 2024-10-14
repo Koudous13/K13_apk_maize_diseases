@@ -1,1 +1,7 @@
+[server]
+headless = true  # Obligatoire pour le déploiement en cloud
+port = $PORT     # Utilisation dynamique du port fourni par Streamlit Cloud
+enableCORS = false
 
+[python]
+version = "3.10"  # Forcer l’utilisation de Python 3.10
