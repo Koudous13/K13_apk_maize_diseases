@@ -1,4 +1,4 @@
-'''import os
+import os
 import gdown
 import streamlit as st
 import numpy as np
@@ -16,7 +16,7 @@ def download_and_load_model():
    try:
         if not os.path.exists(output):
             gdown.download(url, output, quiet=False)
-        model = load_model(output)
+        model = load_model(output, custom_objects=None, compile=True, safe_mode=True)
         return model
    except Exception as e:
         st.error("Erreur lors du chargement du modèle: " + str(e))
@@ -176,18 +176,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-'''
 
-import os
-import gdown
-import streamlit as st
-import numpy as np
-import cv2
-from PIL import Image
-from tensorflow.keras.models import load_model
-import keras
-
-model = load_model("K13_best_model_maize_diseases.keras")
 
 
 
