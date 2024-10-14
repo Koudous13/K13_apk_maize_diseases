@@ -21,7 +21,7 @@ notebook==6.5.4
 notebook-shim==0.2.3
 setuptools==68.0.0
 wheel==0.41.0
-numpy>=1.24.4
+numpy<2
 protobuf==3.20.3
 opencv-python-headless
 pathlib2==2.3.7
