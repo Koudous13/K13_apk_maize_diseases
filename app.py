@@ -6,26 +6,19 @@ import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
 
-
-
 # Appliquer un thème CSS pour l'application
 st.markdown("""
     <style>
-    /* Style global de la page */
     body {
         background: linear-gradient(135deg, #42a5f5 0%, #478ed1 100%);
         color: white;
         font-family: 'Arial', sans-serif;
-    }
-    h1, h2, h3, h4, h5 {
-        color: #ffffff;
     }
     .reportview-container {
         background: #1c1c1c;
         border-radius: 10px;
         padding: 15px;
     }
-    /* Personnalisation des boutons */
     .stButton>button {
         background-color: #28a745;
         color: white;
@@ -34,13 +27,12 @@ st.markdown("""
         font-weight: bold;
         border: none;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        transition: transform 0.2s ease-in-out;
+        transition: transform 0.2s;
     }
     .stButton>button:hover {
         background-color: #218838;
         transform: scale(1.1);
     }
-    /* Animation des images */
     .image-container {
         animation: fadeIn 2s ease-in-out;
     }
@@ -48,7 +40,6 @@ st.markdown("""
         0% { opacity: 0; transform: scale(0.9); }
         100% { opacity: 1; transform: scale(1); }
     }
-    /* Style des résultats de prédiction */
     .prediction-box {
         background-color: #242424;
         padding: 20px;
@@ -61,98 +52,70 @@ st.markdown("""
         font-size: 32px;
         color: #17a2b8;
     }
-    .prediction-box p {
-        font-size: 18px;
-        color: #ddd;
-    }
-    /* Barres de progression personnalisées */
-    .stProgress .css-1yx4hzk {
-        background-color: #1c1c1c;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-    .stProgress .css-1yx4hzk .css-18tm38b {
-        background-color: #42a5f5;
-        transition: width 0.3s ease-in-out;
-    }
     </style>
 """, unsafe_allow_html=True)
 
 # Titre de l'application
 st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 
+# Charger le modèle en gérant les erreurs possibles
+try:
+    model = load_model('K13_best_model_maize_diseases.keras')
+    st.success('Modèle chargé avec succès !')
+except Exception as e:
+    st.error(f"Erreur lors du chargement du modèle : {str(e)}")
 
-model = load_model('K13_best_model_maize_diseases.keras')
+st.subheader("Chargez une photo de feuille de maïs ou utilisez la webcam.")
 
-if model:
-    st.success('Model loaded successfully!')
-
-st.subheader("Chargez une photo de feuille de maïs ou utilisez la webcam pour en prendre une.")
-
-# Widgets pour charger ou prendre une photo
-uploaded_file = st.file_uploader("Téléchargez une image de la feuille de maïs", type=["jpg", "jpeg", "png"])
+# Widgets pour charger une image ou en prendre une avec la webcam
+uploaded_file = st.file_uploader("Téléchargez une image de la feuille", type=["jpg", "jpeg", "png"])
 camera_input = st.camera_input("Ou prenez une photo via la webcam")
 
-# Si l'utilisateur charge ou prend une image
+# Traiter l'image si une entrée est fournie
 if uploaded_file or camera_input:
-    with st.spinner('Traitement de l\'image...'):
-        if uploaded_file:
-            image = Image.open(uploaded_file)
-        else:
-            image = Image.open(camera_input)
+    with st.spinner("Traitement de l'image..."):
+        try:
+            image = Image.open(uploaded_file or camera_input)
+            st.markdown("<div class='image-container'>", unsafe_allow_html=True)
+            st.image(image, caption="Image chargée", use_column_width=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        # Afficher l'image chargée avec un effet animé
-        st.markdown("<div class='image-container'>", unsafe_allow_html=True)
-        st.image(image, caption="Image chargée", use_column_width=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+            # Prétraitement de l'image pour la prédiction
+            image = image.resize((256, 256))
+            image_array = np.array(image) / 255.0
+            image_array = np.expand_dims(image_array, axis=0)
 
-        # Prétraitement de l'image pour le modèle
-        image = image.resize((256, 256))
-        image_array = np.array(image) / 255.0
-        image_array = np.expand_dims(image_array, axis=0)
+            # Prédire la classe de la maladie
+            predictions = model.predict(image_array)
+            predicted_class = np.argmax(predictions, axis=1)[0]
+            confidence = np.max(predictions)
 
-        # Prédiction de la maladie
-        predictions = model.predict(image_array)
-        predicted_class = np.argmax(predictions, axis=1)[0]
+            # Afficher une barre de progression dynamique
+            st.progress(confidence)
 
-        # Afficher une barre de progression dynamique
-        st.progress(np.max(predictions))
+            # Résultat de la prédiction
+            disease_names = [
+                "Cercospora Leaf Spot (Tâche grise)",
+                "Common Rust (Rouille commune)",
+                "Northern Leaf Blight (Brûlure du nord)",
+                "Feuille saine"
+            ]
+            result = disease_names[predicted_class]
 
-        # Affichage des résultats de la prédiction avec des boîtes stylées
-        if predicted_class == 3:
-            st.markdown("""
-            <div class="prediction-box">
-                <h2>🌿 La feuille est saine !</h2>
-                <p>Conseil : Continuez à surveiller vos cultures pour détecter les premiers signes de maladies.</p>
-            </div>
+            st.markdown(f"""
+                <div class="prediction-box">
+                    <h2>⚠️ {result}</h2>
+                    <p>Confiance : {confidence:.2%}</p>
+                </div>
             """, unsafe_allow_html=True)
-        elif predicted_class == 0:
-            st.markdown("""
-            <div class="prediction-box">
-                <h2>⚠️ Cercospora Leaf Spot (Tâche grise)</h2>
-                <p>Traitement recommandé : Appliquez des fongicides appropriés. Veillez à l’élimination des débris.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        elif predicted_class == 1:
-            st.markdown("""
-            <div class="prediction-box">
-                <h2>⚠️ Common Rust (Rouille commune)</h2>
-                <p>Traitement recommandé : Utilisez des variétés résistantes et appliquez des fongicides précoces.</p>
-            </div>
-            """, unsafe_allow_html=True)
-        elif predicted_class == 2:
-            st.markdown("""
-            <div class="prediction-box">
-                <h2>⚠️ Northern Leaf Blight (Brûlure du nord)</h2>
-                <p>Traitement recommandé : Optez pour des variétés résistantes et traitez avec des fongicides spécifiques.</p>
-            </div>
-            """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Erreur lors du traitement de l'image : {str(e)}")
 
-# Bouton de relance pour une nouvelle image
+# Bouton pour recharger une nouvelle image
 if st.button("Prendre une nouvelle photo ou charger une autre image"):
     st.experimental_rerun()
 
-# Footer pour ajouter un petit design de fin
+# Footer
 st.markdown("""
     <hr>
     <div style="text-align: center; color: #bbb;">
@@ -160,9 +123,3 @@ st.markdown("""
         <p>© 2024. Tous droits réservés.</p>
     </div>
 """, unsafe_allow_html=True)
-
-
-
-
-
-
