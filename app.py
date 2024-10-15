@@ -82,7 +82,7 @@ st.markdown("""
 st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 
 
-model = load_model('app_k13_best_model_maize_diseases.weights.h5')
+model = load_model('K13_best_model_maize_diseases.keras')
 
 if model:
     st.success('Model loaded successfully!')
