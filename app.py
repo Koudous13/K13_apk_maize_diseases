@@ -6,6 +6,23 @@ import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
 
+
+# Charger le modèle de prédiction
+url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
+output = 'K13_best_model_maize_diseases.keras'
+
+@st.cache_resource
+def download_and_load_model():
+    # Télécharger le fichier si nécessaire
+   try:
+        if not os.path.exists(output):
+            gdown.download(url, output, quiet=False)
+        model = load_model(output, custom_objects=None, compile=True, safe_mode=True)
+        return model
+   except Exception as e:
+        st.error("Erreur lors du chargement du modèle: " + str(e))
+        return None
+       
 # Appliquer un thème CSS pour l'application
 st.markdown("""
     <style>
@@ -60,8 +77,9 @@ st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 
 # Charger le modèle en gérant les erreurs possibles
 try:
-    model = load_model('K13_best_model_maize_diseases.keras')
-    st.success('Modèle chargé avec succès !')
+    with st.spinner('Loading model...'):
+        model = download_and_load_model()
+        st.success('Modèle chargé avec succès !')
 except Exception as e:
     st.error(f"Erreur lors du chargement du modèle : {str(e)}")
 
