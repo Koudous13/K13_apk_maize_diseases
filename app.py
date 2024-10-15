@@ -111,9 +111,6 @@ if uploaded_file or camera_input:
         except Exception as e:
             st.error(f"Erreur lors du traitement de l'image : {str(e)}")
 
-# Bouton pour recharger une nouvelle image
-if st.button("Prendre une nouvelle photo ou charger une autre image"):
-    st.experimental_rerun()
 
 # Footer
 st.markdown("""
@@ -121,5 +118,6 @@ st.markdown("""
     <div style="text-align: center; color: #bbb;">
         <p>🌽 Application de Détection des Maladies des Feuilles de Maïs - Propulsée par l'IA</p>
         <p>© 2024. Tous droits réservés.</p>
+        <p> Koudous Daouda +22959009829 </p>
     </div>
 """, unsafe_allow_html=True)
