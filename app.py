@@ -5,10 +5,30 @@ import numpy as np
 import cv2
 from PIL import Image
 from tensorflow.keras.models import load_model
+import requests
+
+output = 'K13_best_model_maize_diseases.keras'
+url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
+
+def download_model(url, output):
+    try:
+        response = requests.get(url, stream=True)
+        response.raise_for_status()  # Vérifie s'il y a une erreur HTTP
+
+        with open(output, 'wb') as file:
+            for chunk in response.iter_content(chunk_size=8192):
+                if chunk:
+                    file.write(chunk)
+        return True  # Indique que le téléchargement a réussi
+
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors du téléchargement : {e}")
+        return False  # Indique que le téléchargement a échoué
+
 
 # Définir les variables du modèle
-url = 'https://drive.google.com/uc?export=download&id=1-2clgdew6-_EtJLIO4pqmOacVol2uNfZ'
-output = 'K13_best_model_maize_diseases.keras'
+
+
 
 # Fonction pour télécharger et charger le modèle
 @st.cache_resource
@@ -43,14 +63,13 @@ st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 # Charger le modèle avec gestion d'erreur
 #with st.spinner('Chargement du modèle...'):
 #    model = download_and_load_model()
-try:
-    model = load_model(output)
-except OSError as e:
-    st.error(f"Erreur de fichier : {e}")
-except ImportError as e:
-    st.error(f"Erreur d'import : {e}")
-except Exception as e:
-    st.error(f"Erreur inattendue : {e}")
+if not os.path.exists(output):
+    if download_model(url, output):
+        print("Téléchargement réussi.")
+    else:
+        print("Téléchargement échoué.")
+else:
+    print("Le fichier existe déjà.")
   
 
 
