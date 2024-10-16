@@ -41,8 +41,17 @@ st.markdown("""
 st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 
 # Charger le modèle avec gestion d'erreur
-with st.spinner('Chargement du modèle...'):
-    model = download_and_load_model()
+#with st.spinner('Chargement du modèle...'):
+#    model = download_and_load_model()
+try:
+    model = load_model(output)
+except OSError as e:
+    st.error(f"Erreur de fichier : {e}")
+except ImportError as e:
+    st.error(f"Erreur d'import : {e}")
+except Exception as e:
+    st.error(f"Erreur inattendue : {e}")
+  
 
 if model:
     st.success('Modèle chargé avec succès !')
