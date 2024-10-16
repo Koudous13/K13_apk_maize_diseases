@@ -48,7 +48,7 @@ if model:
     st.success('Modèle chargé avec succès !')
 else:
     st.error("Le modèle n'a pas pu être chargé.")
-    st.stop()  # Arrête l'application si le modèle n'est pas disponible
+    #st.stop()  # Arrête l'application si le modèle n'est pas disponible
 
 # Widgets pour charger une image ou en prendre une avec la webcam
 uploaded_file = st.file_uploader("Téléchargez une image de la feuille", type=["jpg", "jpeg", "png"])
