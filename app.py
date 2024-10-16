@@ -65,11 +65,11 @@ st.title("🌽 Détection des Maladies des Feuilles de Maïs")
 #    model = download_and_load_model()
 if not os.path.exists(output):
     if download_model(url, output):
-        print("Téléchargement réussi.")
+        st.write("Téléchargement réussi.")
     else:
-        print("Téléchargement échoué.")
+        st.write("Téléchargement échoué.")
 else:
-    print("Le fichier existe déjà.")
+    st.write("Le fichier existe déjà.")
   
 
 
